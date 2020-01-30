@@ -24,24 +24,50 @@ def generateProjectsContent():
 
 def createArticlePreview(text):
 	html = BeautifulSoup(text, "html.parser")
-	print(html.prettify())
 	article = html.find_all("div", class_="article")[0]
 	article.decompose()
-	print(html.prettify())
 	return html.prettify()
+
+class Article(object):
+
+	def __init__(self, text):
+		self.html = BeautifulSoup(text, "html.parser")
+
+		dates = self.html.find_all("div", class_="date")
+		if len(dates) > 0:
+			self.date = dates[0].text
+		else:
+			self.date = ""
+
+	def preview(self):
+		bodies = self.html.find_all("div", class_="article")
+		if (len(bodies) > 0):
+			bodies[0].decompose()
+		return self.html.prettify()
+
 
 def generateArticlesContent():
 	ret = '<div class="articles">\n'
 
 	path = "content/articles/"
 
+	articles = []
+
 	for filename in os.listdir(path):
 		if filename.endswith(".html"):
-			ret += '	<div class="article">\n'
 			content = open(os.path.join(path, filename), 'r').read()
-			preview = createArticlePreview(content)
-			ret += preview
-			ret += '\n	</div>'
+			article = Article(content)
+			articles.append(article)
+
+	articles.sort(key=lambda a : a.date)
+	articles.reverse()
+
+	for article in articles:
+		ret += '	<div class="article">\n'
+		ret += article.preview()
+		ret += '\n	</div>'
+
+
 
 	ret += '\n</div>'
 	return ret
