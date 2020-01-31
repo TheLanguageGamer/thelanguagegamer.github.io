@@ -3,7 +3,7 @@ body {
 }
 
 a {
-	color: black;
+	color: #1f454d;
 	text-decoration: none;
 }
 
@@ -53,14 +53,14 @@ a:hover {
 	padding-left: 30px;
 }
 
-.article {
+.preview {
 	padding-left: 30px;
 }
 
-.article .date {
+.preview .date {
 	float: right;
 }
 
-.article .title {
+.preview .title {
 	padding-left: 0px;
 }
